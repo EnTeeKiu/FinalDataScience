@@ -31,20 +31,19 @@ def clean_vinh_tuy_data():
     if "speed_limit_baseline" in df.columns and "current_speed" in df.columns:
         df["speed_deficit"] = df["speed_limit_baseline"] - df["current_speed"]
     
-    # 3. Time-based Interpolation for numeric values
+    # 3. Fill missing numeric values with Grouped Median
     num_cols = df.select_dtypes(include=[np.number]).columns
     
-    # Sort data chronologically so interpolation makes sense
-    if "timestamp" in df.columns:
-        df = df.sort_values(by="timestamp")
+    # Group by direction, day_of_week, and hour_of_day for high precision
+    if all(c in df.columns for c in ["direction", "day_of_week", "hour_of_day"]):
+        group_cols = ["direction", "day_of_week", "hour_of_day"]
+        df[num_cols] = df.groupby(group_cols)[num_cols].transform(lambda x: x.fillna(x.median()))
         
-    # Interpolate linearly, grouped by direction if available (to prevent blending inbound/outbound)
-    if "direction" in df.columns:
-        df[num_cols] = df.groupby("direction")[num_cols].transform(lambda x: x.interpolate(method='linear').ffill().bfill())
-    else:
-        df[num_cols] = df[num_cols].interpolate(method='linear').ffill().bfill()
+    # Fallback 1: Group by just direction and hour_of_day
+    if "direction" in df.columns and "hour_of_day" in df.columns:
+        df[num_cols] = df.groupby(["direction", "hour_of_day"])[num_cols].transform(lambda x: x.fillna(x.median()))
         
-    # Fallback to median just in case an entire column was NaN
+    # Fallback 2: Global median for any remaining NaNs
     for col in num_cols:
         if df[col].isnull().any():
             df[col] = df[col].fillna(df[col].median())
