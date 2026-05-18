@@ -1,0 +1,249 @@
+Final Project
+DATA1010 - Introduction to Data Science
+Spring 2026
+Final Project Submission Guideline
+Submission and deadline
+Each group must preparefour items:
+1. One written report (PDF)
+2. One program package (Python notebook,.ipynb/ GitHub repository)
+3. One presentation slide (PDF or PowerPoint)
+4. One poster (PDF)
+Deadline:all items (written report, code package, slides, and poster) must be submitted to
+Canvasby 23:59 on Monday, 1 June 2026.
+Written report
+•Format.The report must be in PDF format, with maximum6 pages(including ref-
+erences and contribution table). The report must be readable when printed (recom-
+mended: A4 size, standard margins, 11–12 pt font size).
+•Content.The report must contain clear citations and references for any external sources
+used, including generative AI. Any graphs or figures must contain proper titles, labels,
+and descriptions.
+•Structure.The report should follow the sample given in Appendix A. In particular, it
+must contain theContribution declarationtable.
+Program package
+•Format (choose one option).
+– Option A: Python notebook (.ipynb).
+* Upload one copy to Canvas.
+* Upload one copy to Google Colab and insert the Colab link into the written
+report.
+* Ensure the link is accessible to instructors until your final grades are released.
+– Option B: GitHub repository.
+* Upload one copy (.zip) to Canvas.
+* Insert the repo link into the written report.
+* Ensure the link is accessible to instructors until your final grades are released.
+•Content.The code must include all computations, experiments, and results reported
+in the written report.
+•Structure.Organize the code into clearly labeled sections corresponding to each ques-
+tion.
+Presentation slide
+•Format.The slide must be in either PDF or PowerPoint format.
+•Content.Focus on data collecting+processing, methodology, and experiment results.
+•Structure.Divide the presentation into sections by question.
+Poster
+•Format.The poster must be in 1 page A0, portrait, and PDF format.
+•Content.Summarize the dataset, methodology, and key results.
+DATA1010- Introduction to Data Science page 1 of 6
+
+Other notes
+It is strongly recommended to begin the project as early as possible. For any questions or
+clarifications, contact the instructorby 23:59 on Thursday, 28 May 2026.
+Update
+Any changes will be posted here.
+DATA1010- Introduction to Data Science page 2 of 6
+
+Appendix A: Question sheet
+In this final project, each group will collect a practical, real-world dataset and analyze it using
+both supervised learning and unsupervised learning techniques.
+1. Task 1: Data Collection and Data Processing
+Each group must collect a real dataset (self-collected;no online public datasets allowed).
+The dataset must meet the following criteria:
+•01 binary target variable (to be used in supervised learning).
+•At least 04 additional features (to be used in both supervised and unsupervised learn-
+ing).
+•At least 50 valid training samples and another 50 valid testing samplesafterdata
+cleaning.
+•The cleaned dataset must be split equally into a training set and a testing set.
+Your written report must include:
+•Data collection methods: Describe how the data was collected (e.g., in-person or online
+form, interview, duration, population/sampling method, etc.)
+•Data privacy considerations: Explain how you handled sensitive information and en-
+sured participant privacy and data security
+•Data processing: Describe how you handled missing or erroneous values, normaliza-
+tion, feature encoding, and any preprocessing techniques used
+•Data visualization: Provide visualizations that describe feature distributions, relation-
+ships, and correlations (e.g., histograms, scatter plots, correlation heatmaps)
+2. Task 2: Supervised learning
+Use the collected dataset to predict the binary target variable using two classification mod-
+els.
+Required steps and content for the report:
+•Research question: what are you trying to predict/analyze/control?
+•Model implementation: Apply both Logistic Regression and Support Vector Machine
+(SVM)
+•Model evaluation: Report and compare performance on the training and testing sets
+using appropriate metrics (e.g., accuracy, precision, loss/error values)
+•Analysis: Interpret and explain your results. Discuss which model performed better and
+why.
+3. Task 3: Unsupervised learning
+Explore patterns and groupings within your dataset using clustering techniques.
+Required steps and content for the report:
+•Research question: what are you trying to predict/analyze/control?
+•Model implementation: Apply K-Means clustering on the dataset (excluding the binary
+target variable)
+•Evaluation: Report clustering results and relevant metrics (e.g., loss, number of clusters)
+•Analysis: Visualize and interpret the clusters. Explain the choice of number of clusterk.
+Explain if the clusters align with any known patterns or segments in your data.
+DATA1010- Introduction to Data Science page 3 of 6
+
+Appendix B: Written Report sample
+DATA1010 Final Project: Group ##
+Member list:
+No. Name Student ID Email
+1 Jane Doe V202310000 Jane.d@email
+2 John Doe V202310001 John.d@email
+. . .
+Link to Google Colab:[Insert link here]
+1. Introduction, Data Collection and Data Processing
+In this project, we aim to study students’ habits based on their physical and lifestyle fea-
+tures. . .
+We collected data in person using . . . , and data was collected from . . . to . . .
+The questionnaires included 6 questions: Q1: . . . , Q2: . . . , etc.
+The target binary variable isGender(0/1), features areAge(years old),Height(cm), . . .
+Summary of data processing: . . .
+Visualization: . . .
+2. Supervised Learning
+We apply supervised learning models: Logistic Regression and Support Vector Machine
+(SVM) to predict gender.
+These two models are described as follows. . .
+We report the accuracy of these models as follows. . .
+We observed that SVM slightly outperformed logistic regression. One of the reasons is . . .
+3. Unsupervised Learning
+We applied K-Means clustering to cluster students. We choosek= 2because . . .
+We report the numerical performance and accuracy as follows. . .
+The clusters mostly separated male and female participants, however. . .
+4. References
+5. Contribution declaration
+Task Part Sub-task Tom Rose Kate Bob
+1 Write report Design questionnaires ✓✓ ✓ ✓
+1 Write report Clean data ✓ ✓
+. . .
+1 Write code Visualize histogram ✓
+1 Write code Convert data ✓
+. . .
+1 Prepare slide Prepare slide ✓ ✓
+2 . . . . . . . . . . . . . . . . . .
+Note: Use✓to indicate contributors, use✓✓to indicate student in charge (who will
+answer Q&A about that sub-task). Each sub-task (row) selects at most 3 student, and each
+student is in charge at at least 1 sub-task.
+DATA1010- Introduction to Data Science page 4 of 6
+
+Appendix C: Grade Rubric of Written Report and Program Package
+Content Full Level of Performance
+Unsatisfactory Satisfactory Excellent
+(criteria)
+Missing required sec-
+tions, unclear writ-
+ing/structure, missing
+citations/references, or
+weak/incorrect interpreta-
+tion of results.
+Complete structure with
+clear writing and basic
+explanations; citations
+and figures mostly correct;
+minor issues may be ac-
+ceptable.
+Complete, well-organized,
+and clearly written; strong
+interpretation/discussion;
+figures and citations are
+thorough and professional.
+MUST include extra ex-
+ploration, analysis and
+optimization instead of only
+a single accuracy or loss
+value.
+Written Report
+Task 1 30 0/5/10/15 20/25 30
+Task 2 30 0/5/10/15 20/25 30
+Task 3 30 0/5/10/15 20/25 30
+(criteria)
+Code is missing/incorrect,
+does not run end-to-end,
+or results are not repro-
+ducible/traceable to the re-
+port.
+Runs and reproduces re-
+ported results; code is
+reasonably organized into
+sections with basic com-
+ments/outputs.
+Clean, well-structured, and
+reproducible; clear section-
+ing and documentation;
+includes sanity checks and
+thoughtful extra explo-
+ration where appropriate.
+Program Package
+Code 10 0/2/4/6 8 10
+All 100 ≤50 ≤83 ≤100
+* Note:
+•The above rubric applies to the entire group. All group members will typically receive the same grade. However, individual member(s) who demonstrate significant or
+exceptional contributions may be considered for bonus points at the instructor’s discretion. Bonus points, ranging from 1 to 5 (on a 100-point scale), are not guaranteed
+and may involve additional interview questions. They are awarded selectively and not necessarily granted to every group or every project.
+•Any late/missing submissions without justification will result in 0 points for the entire group.
+•Students who do not contribute to the project or are irresponsible for assigned tasks are subject to deductions, up to−100. This includes not coming to class/lab to work
+with group members, not being reachable during the project period, not accepting any task, or not completing tasks that appear in the attached contribution table
+under their name.
+DATA1010 - Introduction to Data Science page 5 of 6
+
+Appendix D: Grade Rubric of Presentation Day
+Content Full Level of Performance
+Unsatisfactory Satisfactory Excellent
+Materials
+(criteria)
+Missing required
+components; un-
+clear/incorrect con-
+tent; poor readabil-
+ity/organization; fig-
+ures/tables are unla-
+beled or misleading.
+Covers required content
+with mostly correct re-
+sults and clear organi-
+zation; visuals are read-
+able with minor issues.
+Polished and pro-
+fessional; clear and
+accurate narrative;
+strong visuals; insight-
+ful interpretation and
+takeaways.
+Poster 25 0/5/10/15 18/20 25
+Slides 25 0/5/10/15 18/20 25
+Oral Presentation and Interview
+(criteria)
+Unclear delivery; poor
+time management;
+cannot explain meth-
+ods/results; major issues
+answering questions.
+Mostly clear delivery
+and pacing; explains
+core ideas and results;
+answers most questions
+adequately.
+Confident, well-paced
+delivery; strong com-
+mand of meth-
+ods/results; engages
+audience; answers
+questions thoughtfully
+and accurately.
+Oral presentation 25 0/5/10/15 18/20 25
+Interview / Q&A 25 0/5/10/15 18/20 25
+All 100 ≤60 ≤80 ≤100
+* Note:
+•The above rubric applies to the entire group. All group members will typically receive the same grade for poster/slides and the oral presentation.
+•Interview/Q&A questions may be directed to individual members. If a member cannot answer questions about the project adequately, individual deductions may be
+applied at the instructor’s discretion.
+DATA1010 - Introduction to Data Science page 6 of 6
