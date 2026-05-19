@@ -28,9 +28,6 @@ def clean_vinh_tuy_data():
         df["day_of_week"] = df["timestamp"].dt.dayofweek
         df["is_holiday"] = df["timestamp"].dt.date.apply(lambda d: d in vn_holidays).astype(int)
     
-    if "speed_limit_baseline" in df.columns and "current_speed" in df.columns:
-        df["speed_deficit"] = df["speed_limit_baseline"] - df["current_speed"]
-    
     # 3. Fill missing numeric values with Grouped Median
     num_cols = df.select_dtypes(include=[np.number]).columns
     
