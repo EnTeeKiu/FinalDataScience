@@ -10,6 +10,7 @@ import sys  # Added for exiting the script
 # ==========================================
 TOMTOM_KEY = "YOUR_TOMTOM_KEY_HERE"
 VISUAL_CROSSING_KEY = "YOUR_VISUAL_CROSSING_KEY_HERE"
+CONGESTION_THRESHOLD = 0.80
 
 # Stratified hours exactly as specified in your design
 STRATEGIC_HOURS = [
@@ -132,7 +133,7 @@ def run_historical_batch(start_day_offset, days_to_scrape):
                     speed_ratio = round(live_speed / free_speed, 2) if (free_speed and free_speed > 0) else 1.0
                     
                     # Logic Fix 2: Refined Congestion Interpretation (Avoiding name changes)
-                    is_congested = 1 if speed_ratio < 0.65 else 0
+                    is_congested = 1 if speed_ratio < CONGESTION_THRESHOLD else 0
                     inc_types = "Congested" if is_congested else "None"
                     mag = 2 if is_congested else 0
 
