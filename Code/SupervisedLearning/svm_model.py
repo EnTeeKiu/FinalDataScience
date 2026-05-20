@@ -19,9 +19,6 @@ def hinge_loss(X, y, beta, beta_0):
     margin = y * (beta_0 + np.dot(X, beta))
     return np.mean(np.maximum(0, 1 - margin))
 
-# File path setup to locate Cleaned Dataset.csv in the same directory as this script
-script_dir = os.path.dirname(os.path.abspath(__file__))
-# file_path = os.path.join(script_dir, "Cleaned Dataset.csv")
 file_path = os.path.join("Processed Datasets", "Cleaned Dataset.csv")
 
 if not os.path.exists(file_path):
@@ -69,6 +66,7 @@ print("Shape of testing set (X_test_cls):", X_test_cls.shape)
 # Checking for missing values (Using np.isnan since X and y are numpy arrays now)
 print("\nMissing values in the training set:")
 print("X:", np.isnan(X_train_cls).sum(), "y:", np.isnan(y_train_cls).sum())
+
 print("\nMissing values in the testing set:")
 print("X:", np.isnan(X_test_cls).sum(), "y:", np.isnan(y_test_cls).sum())
 
@@ -80,9 +78,11 @@ test_counts = pd.Series(y_test_cls).value_counts()
 print("\nTraining set class distribution:")
 print(f"  Positive (1): {train_counts.get(1, 0)}")
 print(f"  Negative (-1): {train_counts.get(-1, 0)}")
+
 print("\nTest set class distribution:")
 print(f"  Positive (1): {test_counts.get(1, 0)}")
 print(f"  Negative (-1): {test_counts.get(-1, 0)}")
+
 print("\nUnique values in y_train_cls:", np.unique(y_train_cls))
 print("Unique values in y_test_cls:", np.unique(y_test_cls))
 
