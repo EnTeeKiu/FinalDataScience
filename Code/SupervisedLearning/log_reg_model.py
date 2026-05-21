@@ -131,3 +131,47 @@ print("\nLogistic Regression Results")
 print("-" * 40)
 print(f"Training loss: {train_loss:.4f}, accuracy: {train_acc:.4f}")
 print(f"Testing loss: {test_loss:.4f}, accuracy: {test_acc:.4f}")
+
+# Metrics synthesis table
+metrics_table = pd.DataFrame({
+    "Metric / Statistic": [
+        "Training Set Shape",
+        "Testing Set Shape",
+        "Training Missing Values (X)",
+        "Training Missing Values (y)",
+        "Testing Missing Values (X)",
+        "Testing Missing Values (y)",
+        "Training Positive Class (1)",
+        "Training Negative Class (0)",
+        "Testing Positive Class (1)",
+        "Testing Negative Class (0)",
+        "Training Logistic Loss",
+        "Training Accuracy",
+        "Testing Logistic Loss",
+        "Testing Accuracy",
+        "Model Bias (beta_0)",
+        "Model Weights Count"
+    ],
+    "Value": [
+        X_train_cls.shape,
+        X_test_cls.shape,
+        np.isnan(X_train_cls).sum(),
+        np.isnan(y_train_cls).sum(),
+        np.isnan(X_test_cls).sum(),
+        np.isnan(y_test_cls).sum(),
+        train_counts.get(1, 0),
+        train_counts.get(0, 0),
+        test_counts.get(1, 0),
+        test_counts.get(0, 0),
+        round(train_loss, 4),
+        round(train_acc, 4),
+        round(test_loss, 4),
+        round(test_acc, 4),
+        round(beta_0, 4),
+        len(beta)
+    ]
+})
+
+print("\n================ METRICS SYNTHESIS TABLE ================")
+print(metrics_table.to_string(index=False))
+print("=" * 58)
