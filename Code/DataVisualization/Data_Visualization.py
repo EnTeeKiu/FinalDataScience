@@ -10,13 +10,11 @@ preprocessed_data_file = "Preprocessed_Data_VinhTuy.csv"
 # Define file paths
 raw_data_path = os.path.join("Processed Datasets", raw_data_file)
 output_dir = "Data Visualization"
-preprocessed_data_path = os.path.join("Processed Datasets", preprocessed_data_file)
 
 # Fallback paths
 if not os.path.exists(raw_data_path):
     raw_data_path = os.path.join("..", "..", "Processed Datasets", raw_data_file)
     output_dir = os.path.join("..", "..", "Data Visualization")
-    preprocessed_data_path = os.path.join("..", "..", "Processed Datasets", preprocessed_data_file)
 
 if not os.path.exists(raw_data_path):
     local_abs_path = r"..." # Input local storage destination
@@ -74,33 +72,31 @@ if all(col in df_raw.columns for col in ['temp', 'humidity', 'is_congested']):
 print("✅ Exploratory visualizations generated.")
 
 # ==========================================
-# Phase 2: Preprocessed Data Visualizations
+# Phase 2: Correlation Heatmap
 # ==========================================
-if os.path.exists(preprocessed_data_path):
-    print(f"\nLoading preprocessed data for heatmap: {preprocessed_data_path}")
-    df_prep = pd.read_csv(preprocessed_data_path)
+print("\nGenerating Correlation Heatmap...")
+if len(df_raw.columns) > 1:
+    plt.figure(figsize=(14, 12))
+    
+    # Calculate correlation for numerical columns only
+    numerical_cols = df_raw.select_dtypes(include=['int32', 'int64', 'float32', 'float64']).columns
+    corr_matrix = df_raw[numerical_cols].corr()
 
-    if len(df_prep.columns) > 1:
-        plt.figure(figsize=(14, 12))
-        corr_matrix = df_prep.corr()
+    sns.heatmap(
+        corr_matrix,
+        annot=True,
+        fmt=".0%",
+        cmap='coolwarm',
+        cbar=True,
+        square=True,
+        annot_kws={"size": 9}
+    )
 
-        sns.heatmap(
-            corr_matrix,
-            annot=True,
-            fmt=".0%",
-            cmap='coolwarm',
-            cbar=True,
-            square=True,
-            annot_kws={"size": 9}
-        )
-
-        plt.title('Correlation Heatmap of Features (Percentage Format)', fontsize=16, pad=20)
-        plt.savefig(os.path.join(output_dir, '5_correlation_heatmap.png'), bbox_inches='tight')
-        plt.close()
-        print("✅ Correlation Heatmap successfully generated.")
-    else:
-        print("⚠️ Error: Not enough columns left in preprocessed data to construct a heatmap.")
+    plt.title('Correlation Heatmap of Features (Percentage Format)', fontsize=16, pad=20)
+    plt.savefig(os.path.join(output_dir, '5_correlation_heatmap.png'), bbox_inches='tight')
+    plt.close()
+    print("✅ Correlation Heatmap successfully generated.")
 else:
-    print(f"⚠️ Preprocessed data not found at {preprocessed_data_path}. Run feature_engineering.py first.")
+    print("⚠️ Error: Not enough columns left to construct a heatmap.")
 
 print("\n🎉 Visualization Complete!")
