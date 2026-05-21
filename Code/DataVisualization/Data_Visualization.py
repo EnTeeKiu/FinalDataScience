@@ -3,23 +3,24 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-# Select preprocesssed data
-data_use = "Preprocessed_Data_VinhTuy.csv"
+# File names
+raw_data_file = "Processed Dataset.csv"
+preprocessed_data_file = "Preprocessed_Data_VinhTuy.csv"
 
 # Define file paths
-raw_data_path = os.path.join("Processed Datasets", data_use)
+raw_data_path = os.path.join("Processed Datasets", raw_data_file)
 output_dir = "Data Visualization"
-preprocessed_data_path = os.path.join(output_dir, data_use)
+preprocessed_data_path = os.path.join("Processed Datasets", preprocessed_data_file)
 
 # Fallback paths
 if not os.path.exists(raw_data_path):
-    raw_data_path = os.path.join("..", "..", "Processed Datasets", data_use)
+    raw_data_path = os.path.join("..", "..", "Processed Datasets", raw_data_file)
     output_dir = os.path.join("..", "..", "Data Visualization")
-    preprocessed_data_path = os.path.join(output_dir, data_use)
+    preprocessed_data_path = os.path.join("..", "..", "Processed Datasets", preprocessed_data_file)
 
 if not os.path.exists(raw_data_path):
     local_abs_path = r"..." # Input local storage destination
-    raw_data_path = local_abs_path if os.path.exists(local_abs_path) else data_use
+    raw_data_path = local_abs_path if os.path.exists(local_abs_path) else raw_data_file
 
 os.makedirs(output_dir, exist_ok=True)
 sns.set_theme(style="whitegrid")
@@ -43,7 +44,7 @@ if 'is_congested' in df_raw.columns:
 # Plot 2: Route Delay Distribution
 if 'route_delay_s' in df_raw.columns:
     plt.figure(figsize=(10, 6))
-    sns.histplot(df_raw['route_delay_s'], bins=50, kde=True, color='skyblue')
+    sns.histplot(df_raw['route_delay_s'], bins=50, kde=True, color='#87CEEB', alpha=0.6, edgecolor='black', linewidth=0.7)
     plt.title('Distribution of Route Delay (seconds)')
     plt.xlabel('Route Delay (s)')
     plt.ylabel('Frequency')
@@ -63,7 +64,7 @@ if 'hour_of_day' in df_raw.columns and 'route_delay_s' in df_raw.columns:
 # Plot 4: Temperature vs Humidity colored by Congestion
 if all(col in df_raw.columns for col in ['temp', 'humidity', 'is_congested']):
     plt.figure(figsize=(10, 6))
-    sns.scatterplot(x='temp', y='humidity', hue='is_congested', data=df_raw, palette='coolwarm', alpha=0.6)
+    sns.scatterplot(x='temp', y='humidity', hue='is_congested', data=df_raw, palette={0: '#1f77b4', 1: '#d62728'}, alpha=0.8, s=40)
     plt.title('Temperature vs Humidity (Colored by Congestion)')
     plt.xlabel('Temperature (°C)')
     plt.ylabel('Humidity (%)')

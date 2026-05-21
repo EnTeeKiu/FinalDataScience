@@ -2,17 +2,17 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 import os
 
-data_use = "Preprocessed_Data_VinhTuy.csv"
+data_use = "Processed Dataset.csv"
 
 # Define paths
 # Adjust paths depending on where the script is run from
 input_path = os.path.join("Processed Datasets", data_use)
-output_dir = "Data Visualization"
+output_dir = "Processed Datasets"
 
 # Fallback if run from inside Code/DataProcessing
 if not os.path.exists(input_path):
     input_path = os.path.join("..", "..", "Processed Datasets", data_use)
-    output_dir = os.path.join("..", "..", "Data Visualization")
+    output_dir = os.path.join("..", "..", "Processed Datasets")
 
 os.makedirs(output_dir, exist_ok=True)
 
