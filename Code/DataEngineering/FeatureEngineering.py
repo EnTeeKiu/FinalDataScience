@@ -2,18 +2,20 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 import os
 
+data_use = "Preprocessed_Data_VinhTuy.csv"
+
 # Define file paths
-input_path = os.path.join("Processed Datasets", "Processed Dataset.csv")
+input_path = os.path.join("Processed Datasets", data_use)
 output_dir = "Data Visualization"
 
 # Fallback paths
 if not os.path.exists(input_path):
-    input_path = os.path.join("..", "..", "Processed Datasets", "Processed Dataset.csv")
+    input_path = os.path.join("..", "..", "Processed Datasets", data_use)
     output_dir = os.path.join("..", "..", "Data Visualization")
 
 if not os.path.exists(input_path):
     local_abs_path = r"..."
-    input_path = local_abs_path if os.path.exists(local_abs_path) else "Processed Dataset.csv"
+    input_path = local_abs_path if os.path.exists(local_abs_path) else data_use
 
 os.makedirs(output_dir, exist_ok=True)
 
