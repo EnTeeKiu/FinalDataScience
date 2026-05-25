@@ -75,15 +75,23 @@ To help our models capture real-world traffic logic, we engineered 6 "golden fea
     *   **Testing Precision:** 58.80%
     *   **Testing Recall:** 62.98%
 
+### 📊 Key Evaluation Visualizations Generated:
+We added a helper script [visualize_supervised.py](file:///d:/Datumi/FinalDataScience-1/Code/SupervisedLearning/visualize_supervised.py) that automatically outputs **3 professional, publication-quality charts** in the `Data Visualization/Task 2` folder:
+*   **`Task 2/8_confusion_matrices.png` (Side-by-side Confusion Matrices):** Visually breaks down the exact classification counts—showing True Positives, True Negatives, False Positives, and False Negatives on the testing set.
+*   **`Task 2/9_roc_curves.png` (ROC Curves Comparison):** Compares the Receiver Operating Characteristic (Sensitivity vs. 1-Specificity) curves and reports the **Area Under the Curve (AUC)**. The higher AUC for SVM indicates its superior ability to distinguish congestion states.
+*   **`Task 2/10_feature_coefficients.png` (Feature Importance / Model Weights):** A side-by-side bar chart showing the $\beta$ coefficients assigned to each feature. This is the **most critical plot** for model interpretability, proving that *Rush Hour Period* and *Rush x Weather Interaction* are the strongest predictors of traffic congestion.
+
 ---
 
 ## 5. Unsupervised Model (K-Means Clustering)
 
 *   **Approach:** We applied **K-Means clustering** directly on our 6 standardized features (excluding the target `is_congested`) to let the algorithm find natural traffic states.
-*   **Optimal K Selection:** Determined $K=6$ as the optimal number of clusters using a combination of the **Elbow Method** (WCSS) and **Silhouette Analysis**.
+*   **Optimal K Selection:** Determined $K=6$ as the optimal number of clusters using a combination of the **Elbow Method** (WCSS) and **Silhouette Analysis** (saved to `Task 3/5_elbow_silhouette.png`).
 *   **Visualization & Dimensionality Reduction:**
-    *   To view our 6D clusters in a 2D plane, we projected the data using **Principal Component Analysis (PCA)**.
+    *   To view our 6D clusters in a 2D plane, we projected the data using **Principal Component Analysis (PCA)** (saved to `Task 3/6_pca_clusters_direct.png`).
     *   *The PCA Overlap:* On the 2D PCA plot, the clusters display some overlap. This is a normal mathematical artifact because the first 2 PCs capture **45.46%** of the total variance, meaning 54.54% of the feature variance is omitted in 2D. However, the clusters are mathematically distinct in the original 6D space (as proven by our cluster profiling).
+*   **Cluster Interpretability Plot:**
+    *   We generated a **`Task 3/7_cluster_profiles.png` (Cluster Profile Heatmap)** which displays the mean values of each feature for each K-Means cluster. This is the **most important plot for Task 3** as it allows the jury to visually see the exact characteristics (time, direction, weather) defining each traffic state.
 
 ---
 

@@ -12,9 +12,9 @@ import os
 sns.set_theme(style="whitegrid")
 
 # Ensure output directory for visualization exists
-output_dir = "Data Visualization"
+output_dir = os.path.join("Data Visualization", "Task 3")
 if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
 
 # --- Load Data ---
 file_path = os.path.join("Processed Datasets", "Processed Dataset.csv")
@@ -136,6 +136,26 @@ cluster_profiles = cluster_profiles.round(2)
 
 print("\nCluster Profiles (Original Feature Means & Actual Congestion Rate):")
 print(cluster_profiles.to_string())
+
+# Generate Cluster Profile Heatmap for visualization
+plt.figure(figsize=(10, 6))
+profile_heatmap_df = cluster_profiles[features].rename(columns={
+    'is_rush_hour': 'Rush Hour Period',
+    'direction_inbound': 'Inbound Direction',
+    'adverse_weather_score': 'Weather Severity',
+    'rush_weather_interaction': 'Rush x Weather Interaction',
+    'dow_sin': 'Day of Week (Sin)',
+    'dow_cos': 'Day of Week (Cos)'
+})
+sns.heatmap(profile_heatmap_df, annot=True, cmap="YlGnBu", fmt=".2f", cbar=True)
+plt.title("Cluster Profile Mean Features (K-Means Traffic Contexts)", fontsize=14, fontweight="bold", pad=15)
+plt.xlabel("Features", fontsize=12, labelpad=10)
+plt.ylabel("K-Means Cluster", fontsize=12, labelpad=10)
+plt.yticks(rotation=0)
+plt.tight_layout()
+plt.savefig(os.path.join(output_dir, "7_cluster_profiles.png"), dpi=300)
+print("Saved Cluster Profiles heatmap to: 7_cluster_profiles.png")
+plt.close()
 
 print("\n--- ANALYSIS CONCLUSION FOR REPORT ---")
 print("By clustering directly on the original standardized features, we preserved 100% of the variance")

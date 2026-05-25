@@ -103,6 +103,12 @@ Tỷ lệ chia Train/Test 50/50 như Rubric yêu cầu:
 > 1. Cả hai mô hình đều không bị Overfitting (độ chính xác tập Test tương đồng tập Train).
 > 2. Mô hình **SVM cho hiệu năng vượt trội hơn** về mặt F1-Score (60.82% so với 54.56% của Logistic Regression) nhờ độ bao phủ (Recall) tốt hơn đáng kể (62.98% so với 50.52%), giúp nhận diện được nhiều trường hợp ùn tắc thực tế hơn.
 
+### 📊 Các biểu đồ trực quan quan trọng đã được tạo:
+Tôi đã tạo và chạy một tập lệnh hỗ trợ [visualize_supervised.py](file:///d:/Datumi/FinalDataScience-1/Code/SupervisedLearning/visualize_supervised.py) để tự động xuất ra **03 biểu đồ trực quan hóa chuyên nghiệp** trong thư mục `Data Visualization/Task 2`:
+*   **`Task 2/8_confusion_matrices.png` (Ma trận nhầm lẫn của cả hai mô hình đặt cạnh nhau):** Giúp người đọc dễ dàng thấy được chính xác số lượng ca dự đoán đúng (True Positive, True Negative) và dự đoán sai (False Positive, False Negative) trên tập Test.
+*   **`Task 2/9_roc_curves.png` (So sánh đường cong ROC và chỉ số AUC):** Biểu diễn trực quan tỷ lệ True Positive Rate so với False Positive Rate ở các ngưỡng khác nhau. Chỉ số AUC của SVM cao hơn cho thấy mô hình này có khả năng phân biệt tắc đường tốt hơn.
+*   **`Task 2/10_feature_coefficients.png` (So sánh trọng số hệ số đặc trưng - Feature Importance):** Đây là biểu đồ **quan trọng nhất** dùng để trả lời câu hỏi *"Tại sao mô hình dự đoán như vậy và yếu tố nào ảnh hưởng nhiều nhất?"*. Nó biểu diễn trọng số của 6 đặc trưng. Ví dụ, đặc trưng *Rush Hour Period* và *Rush x Weather Interaction* có trọng số dương lớn nhất, chứng tỏ đây là hai tác nhân mạnh nhất thúc đẩy ùn tắc giao thông.
+
 ---
 
 ## 5. Trạng Thế Code Hiện Tại (Đã Cập Nhật)
@@ -110,4 +116,4 @@ Tỷ lệ chia Train/Test 50/50 như Rubric yêu cầu:
 Tôi đã cập nhật trực tiếp toàn bộ các bản sửa lỗi và tối ưu vào file gốc của các bạn:
 1. Sửa lỗi `BASE_DIR` đường dẫn trong [Data_Cleaning.py](file:///d:/Datumi/FinalDataScience-1/Code/DataCleaning/Data_Cleaning.py).
 2. Sửa lỗi chuẩn hóa rò rỉ dữ liệu trong [log_reg_model.py](file:///d:/Datumi/FinalDataScience-1/Code/SupervisedLearning/log_reg_model.py) và [svm_model.py](file:///d:/Datumi/FinalDataScience-1/Code/SupervisedLearning/svm_model.py).
-3. Sửa cấu trúc gom cụm phân tích đặc trưng trực tiếp trên 6 chiều và xuất biểu đồ PCA trong [k_mean.py](file:///d:/Datumi/FinalDataScience-1/Code/UnsupervisedLearning/k_mean.py).
+3. Sửa cấu trúc gom cụm phân tích đặc trưng trực tiếp trên 6 chiều và xuất biểu đồ PCA (`6_pca_clusters_direct.png`), biểu đồ Elbow (`5_elbow_silhouette.png`) cùng biểu đồ nhiệt thuộc tính các cụm (`7_cluster_profiles.png`) trong thư mục `Data Visualization/Task 3` thông qua file [k_mean.py](file:///d:/Datumi/FinalDataScience-1/Code/UnsupervisedLearning/k_mean.py).

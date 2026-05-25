@@ -9,9 +9,9 @@ input_path = os.path.join("Processed Datasets", "Processed Dataset.csv")
 if not os.path.exists(input_path):
     input_path = os.path.join("..", "..", "Processed Datasets", "Processed Dataset.csv")
 
-output_dir = "Data Visualization"
+output_dir = os.path.join("Data Visualization", "Task 1")
 if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
 
 print(f"Loading data for visualization from: {input_path}")
 df = pd.read_csv(input_path)
