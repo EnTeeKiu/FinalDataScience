@@ -39,35 +39,18 @@ X_processed = scaler.fit_transform(X)
 print(f"Original dataset shape: {X_processed.shape}")
 
 # =====================================================================
-# STEP 1: PCA (DIMENSIONALITY REDUCTION BEFORE K-MEANS)
+# STEP 1: FINDING THE OPTIMAL 'K' ON STANDARDIZED FEATURES
 # =====================================================================
-print("\n--- STEP 1: Running PCA to reduce dimensionality ---")
-# Reduce the 6 features down to 2 Principal Components to denoise and prepare for K-Means
-pca = PCA(n_components=2, random_state=42)
-X_pca = pca.fit_transform(X_processed)
-
-df['PCA1'] = X_pca[:, 0]
-df['PCA2'] = X_pca[:, 1]
-
-explained_variance = pca.explained_variance_ratio_
-total_variance_explained = sum(explained_variance) * 100
-print(f"Reduced to 2 Principal Components.")
-print(f"Total Variance Explained by 2 PCs: {total_variance_explained:.2f}%")
-
-# =====================================================================
-# STEP 2: FINDING THE OPTIMAL 'K' ON PCA DATA
-# =====================================================================
-print("\n--- STEP 2: Running Elbow Method and Silhouette Analysis on PCA data ---")
+print("\n--- STEP 1: Running Elbow Method and Silhouette Analysis on scaled features ---")
 inertias = []
 silhouette_scores = []
 K_range = range(2, 11) 
 
-# NOTICE: We are now fitting K-Means on X_pca, not X_processed
 for k in K_range:
     km = KMeans(n_clusters=k, random_state=42, n_init=10)
-    labels = km.fit_predict(X_pca) 
+    labels = km.fit_predict(X_processed) 
     inertias.append(km.inertia_)
-    silhouette_scores.append(silhouette_score(X_pca, labels))
+    silhouette_scores.append(silhouette_score(X_processed, labels))
 
 # Plotting the evaluation metrics
 fig, ax1 = plt.subplots(figsize=(10, 6))
@@ -84,23 +67,38 @@ ax2.set_ylabel('Silhouette Score', color=color, fontsize=12)
 ax2.plot(K_range, silhouette_scores, marker='s', color=color, linewidth=2, label='Silhouette Score')
 ax2.tick_params(axis='y', labelcolor=color)
 
-plt.title('Optimal K Selection (on PCA Data)', fontsize=14, fontweight='bold')
+plt.title('Optimal K Selection (on Standardized Features)', fontsize=14, fontweight='bold')
 fig.tight_layout()
-plt.savefig(os.path.join(output_dir, "5_pca_elbow_silhouette.png"), dpi=300)
-print("Saved Optimal K plot to: 5_pca_elbow_silhouette.png")
+plt.savefig(os.path.join(output_dir, "5_elbow_silhouette.png"), dpi=300)
+print("Saved Optimal K plot to: 5_elbow_silhouette.png")
 plt.close()
 
 # =====================================================================
-# STEP 3: FINAL K-MEANS IMPLEMENTATION
+# STEP 2: FINAL K-MEANS IMPLEMENTATION ON ORIGINAL FEATURES
 # =====================================================================
 OPTIMAL_K = 6
-print(f"\n--- STEP 3: Fitting Final K-Means Model with K={OPTIMAL_K} ---")
+print(f"\n--- STEP 2: Fitting Final K-Means Model directly on features with K={OPTIMAL_K} ---")
 
-# Fit on PCA data
 kmeans = KMeans(n_clusters=OPTIMAL_K, random_state=42, n_init=10)
-df['Cluster'] = kmeans.fit_predict(X_pca)
+df['Cluster'] = kmeans.fit_predict(X_processed)
 
 print(f"Final Model Inertia (Loss): {kmeans.inertia_:.2f}")
+
+# =====================================================================
+# STEP 3: RUNNING PCA FOR VISUALIZATION PURPOSES ONLY
+# =====================================================================
+print("\n--- STEP 3: Running PCA to reduce dimensionality for plotting ---")
+# Project the 6 features down to 2 Principal Components strictly for 2D visualization
+pca = PCA(n_components=2, random_state=42)
+X_pca = pca.fit_transform(X_processed)
+
+df['PCA1'] = X_pca[:, 0]
+df['PCA2'] = X_pca[:, 1]
+
+explained_variance = pca.explained_variance_ratio_
+total_variance_explained = sum(explained_variance) * 100
+print(f"Reduced to 2 Principal Components for plotting.")
+print(f"Total Variance Explained by 2 PCs: {total_variance_explained:.2f}%")
 
 # =====================================================================
 # STEP 4: VISUALIZATION IN PCA SPACE
@@ -130,8 +128,7 @@ plt.close()
 # =====================================================================
 print("\n--- STEP 5: TRAFFIC CONTEXT PROFILING ---")
 
-# Even though we clustered in PCA space, we MUST group by original features 
-# so we can explain what the clusters mean in real life.
+# Profiles computed using original features
 cluster_profiles = df.groupby('Cluster')[features].mean()
 cluster_profiles['Congestion_Rate (%)'] = df.groupby('Cluster')['is_congested'].mean() * 100
 cluster_profiles['Count'] = df.groupby('Cluster').size()
@@ -141,6 +138,6 @@ print("\nCluster Profiles (Original Feature Means & Actual Congestion Rate):")
 print(cluster_profiles.to_string())
 
 print("\n--- ANALYSIS CONCLUSION FOR REPORT ---")
-print("By applying PCA before K-Means, we reduced the feature space to its principal components,")
-print("eliminating noise and allowing K-Means to find more robust, spherical clusters.")
-print("The profiling shows these PCA-based clusters still translate perfectly to real-world traffic contexts.")
+print("By clustering directly on the original standardized features, we preserved 100% of the variance")
+print("and allowed K-Means to identify real-world traffic contexts (such as distinct inbound vs outbound rush hour profiles).")
+print("PCA was utilized as a visualization tool to project these high-dimensional clusters onto a 2D plane.")

@@ -24,16 +24,29 @@ sns.set_theme(style="whitegrid")
 # Purpose: Show the jury why we need F1-Score instead of just Accuracy
 # =====================================================================
 plt.figure(figsize=(8, 6))
-ax = sns.countplot(x='is_congested', data=df, palette='Set2')
-plt.title('Distribution of Traffic Congestion (Class Imbalance)', fontsize=14, fontweight='bold')
-plt.xlabel('Is Congested (0 = No, 1 = Yes)', fontsize=12)
-plt.ylabel('Number of Records', fontsize=12)
+custom_colors = ['#4A90E2', '#D9534F'] # Soft Blue (Normal), Soft Red (Congested)
+ax = sns.countplot(x='is_congested', data=df, palette=custom_colors)
+plt.title('Distribution of Traffic Congestion States', fontsize=14, fontweight='bold', pad=15)
+plt.xlabel('Traffic Flow State', fontsize=12, labelpad=10)
+plt.ylabel('Number of Records', fontsize=12, labelpad=10)
+
+# Set custom x-tick labels directly to make it clean
+ax.set_xticks([0, 1])
+ax.set_xticklabels(['Normal Flow', 'Congested'])
+
+# Add descriptive legend manually to avoid duplicate bar errors
+import matplotlib.patches as mpatches
+blue_patch = mpatches.Patch(color='#4A90E2', label='0: Normal Flow')
+red_patch = mpatches.Patch(color='#D9534F', label='1: Congested Traffic')
+ax.legend(handles=[blue_patch, red_patch], title='Traffic Status', loc='upper right')
 
 # Add value labels on top of bars
 for p in ax.patches:
-    ax.annotate(f'{int(p.get_height())}', (p.get_x() + p.get_width() / 2., p.get_height()),
-                ha='center', va='bottom', fontsize=11, color='black', xytext=(0, 5),
-                textcoords='offset points')
+    height = p.get_height()
+    if height > 0:
+        ax.annotate(f'{int(height)}', (p.get_x() + p.get_width() / 2., height),
+                    ha='center', va='bottom', fontsize=11, color='black', xytext=(0, 5),
+                    textcoords='offset points')
 
 plt.tight_layout()
 plt.savefig(os.path.join(output_dir, "1_target_distribution.png"), dpi=300)
@@ -46,11 +59,22 @@ plt.close()
 # =====================================================================
 if 'adverse_weather_score' in df.columns:
     plt.figure(figsize=(8, 6))
-    sns.barplot(x='adverse_weather_score', y='is_congested', data=df, palette='Reds', errorbar=None)
-    plt.title('Congestion Probability by Weather Severity', fontsize=14, fontweight='bold')
-    plt.xlabel('Adverse Weather Score (0=Clear, 1=Mild, 2=Severe)', fontsize=12)
-    plt.ylabel('Probability of Congestion (%)', fontsize=12)
-    plt.ylim(0, 1) # Set Y-axis from 0 to 1 (0% to 100%)
+    weather_colors = ['#8FBC8F', '#F4A460', '#D9534F'] # Sage Green (Clear), Sandy Orange (Mild), Soft Red (Severe)
+    ax = sns.barplot(x='adverse_weather_score', y='is_congested', data=df, palette=weather_colors, errorbar=None)
+    plt.title('Congestion Probability by Weather Severity', fontsize=14, fontweight='bold', pad=15)
+    plt.xlabel('Weather Severity Score', fontsize=12, labelpad=10)
+    plt.ylabel('Probability of Congestion (%)', fontsize=12, labelpad=10)
+    plt.ylim(0, 100) # Set Y-axis from 0 to 1 (0% to 100%)
+    
+    # Custom x-tick labels
+    ax.set_xticks([0, 1, 2])
+    ax.set_xticklabels(['Clear', 'Mild', 'Severe'])
+    
+    # Add descriptive legend
+    green_patch = mpatches.Patch(color='#8FBC8F', label='0: Clear / Normal')
+    orange_patch = mpatches.Patch(color='#F4A460', label='1: Light Rain / Low Visibility')
+    red_patch = mpatches.Patch(color='#D9534F', label='2: Heavy Rain / Dense Fog')
+    ax.legend(handles=[green_patch, orange_patch, red_patch], title='Weather Severity', loc='upper left')
     
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, "2_weather_impact.png"), dpi=300)
@@ -63,12 +87,22 @@ if 'adverse_weather_score' in df.columns:
 # =====================================================================
 if 'is_rush_hour' in df.columns and 'adverse_weather_score' in df.columns:
     plt.figure(figsize=(10, 6))
-    sns.barplot(x='is_rush_hour', y='is_congested', hue='adverse_weather_score', data=df, palette='YlOrRd', errorbar=None)
-    plt.title('Interaction Effect: Rush Hour x Weather Severity', fontsize=14, fontweight='bold')
-    plt.xlabel('Is Rush Hour? (0 = No, 1 = Yes)', fontsize=12)
-    plt.ylabel('Probability of Congestion (%)', fontsize=12)
-    plt.legend(title='Weather Score')
+    weather_colors = ['#8FBC8F', '#F4A460', '#D9534F']
+    ax = sns.barplot(x='is_rush_hour', y='is_congested', hue='adverse_weather_score', data=df, palette=weather_colors, errorbar=None)
+    plt.title('Interaction Effect: Rush Hour vs. Weather Severity', fontsize=14, fontweight='bold', pad=15)
+    plt.xlabel('Rush Hour Period', fontsize=12, labelpad=10)
+    plt.ylabel('Probability of Congestion (%)', fontsize=12, labelpad=10)
     plt.ylim(0, 1)
+    
+    # Custom x-tick labels to make it very clean
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels(['Off-Peak Hour', 'Rush Hour'])
+    
+    # Add descriptive legend
+    green_patch = mpatches.Patch(color='#8FBC8F', label='0: Clear / Normal')
+    orange_patch = mpatches.Patch(color='#F4A460', label='1: Light Rain / Low Visibility')
+    red_patch = mpatches.Patch(color='#D9534F', label='2: Heavy Rain / Dense Fog')
+    ax.legend(handles=[green_patch, orange_patch, red_patch], title='Weather Severity', loc='upper left')
     
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, "3_interaction_effect.png"), dpi=300)

@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 # Config file paths
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DATA_PATH = os.path.join(BASE_DIR, "Raw Datasets", "VINH_TUY.csv")
 OUTPUT_DIR = os.path.join(BASE_DIR, "Processed Datasets")
 TARGET_COL = "is_congested"

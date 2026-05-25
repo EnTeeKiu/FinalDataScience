@@ -40,14 +40,15 @@ target = 'is_congested'
 X = df[features]
 y = df[target].astype(int)
 
-# Standardize numerical features
-scaler = StandardScaler()
-X_processed = scaler.fit_transform(X)
-
-# Split 50% Train - 50% Test as strictly required by the Rubric. stratify=y handles class imbalance.
-X_train, X_test, y_train, y_test = train_test_split(
-    X_processed, y, test_size=0.5, random_state=42, stratify=y
+# Split 50% Train - 50% Test first to prevent data leakage, as strictly required by the Rubric. stratify=y handles class imbalance.
+X_train_raw, X_test_raw, y_train, y_test = train_test_split(
+    X, y, test_size=0.5, random_state=42, stratify=y
 )
+
+# Standardize features AFTER splitting to prevent data leakage.
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train_raw)
+X_test = scaler.transform(X_test_raw)
 
 y_train_arr = y_train.values
 y_test_arr = y_test.values
