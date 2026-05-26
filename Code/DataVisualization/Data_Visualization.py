@@ -64,7 +64,7 @@ if 'adverse_weather_score' in df.columns:
     plt.title('Congestion Probability by Weather Severity', fontsize=14, fontweight='bold', pad=15)
     plt.xlabel('Weather Severity Score', fontsize=12, labelpad=10)
     plt.ylabel('Probability of Congestion (%)', fontsize=12, labelpad=10)
-    plt.ylim(0, 100) # Set Y-axis from 0 to 1 (0% to 100%)
+    plt.ylim(0, 1) # Set Y-axis from 0 to 1 (0% to 100%)
     
     # Custom x-tick labels
     ax.set_xticks([0, 1, 2])
