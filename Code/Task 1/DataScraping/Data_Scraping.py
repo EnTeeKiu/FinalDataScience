@@ -3,9 +3,11 @@ import pandas as pd
 from datetime import datetime, timedelta
 import time
 import os
-import sys  
+import sys  # Added for exiting the script
 
+# ==========================================
 # 1. CREDENTIALS & SETTINGS
+# ==========================================
 TOMTOM_KEY = "YOUR_TOMTOM_KEY_HERE"
 VISUAL_CROSSING_KEY = "YOUR_VISUAL_CROSSING_KEY_HERE"
 CONGESTION_THRESHOLD = 0.80
@@ -26,7 +28,9 @@ ROUTE_CONFIG = {
     }
 }
 
+# ==========================================
 # 2. LOGIC HELPERS
+# ==========================================
 
 def get_nearest_weather(hourly_data, target_time_str):
     """Mitigates Temporal Bias: Finds weather hour closest to the traffic sample"""
@@ -51,7 +55,7 @@ def get_historical_routing(start, end, timestamp):
         res = requests.get(url, timeout=12)
         
         if res.status_code != 200: 
-            print(f"\nAPI Error {res.status_code} at {timestamp}")
+            print(f"\n❌ API Error {res.status_code} at {timestamp}")
             sys.exit("Critical Error: TomTom API failed. Halting scraping immediately.")
             
         s = res.json()['routes'][0]['summary']
@@ -65,10 +69,12 @@ def get_historical_routing(start, end, timestamp):
         return curr_tt, free_tt, live_speed, free_speed
         
     except Exception as e:
-        print(f"\nConnection Error: {e}")
+        print(f"\n⚠️ Connection Error: {e}")
         sys.exit("Critical Error: TomTom API connection failed. Halting scraping immediately.")
 
+# ==========================================
 # 3. BATCH PROCESSOR ENGINE
+# ==========================================
 def run_historical_batch(start_day_offset, days_to_scrape):
     for d in range(start_day_offset, start_day_offset + days_to_scrape):
         target_date = (datetime.now() - timedelta(days=d))
@@ -86,13 +92,13 @@ def run_historical_batch(start_day_offset, days_to_scrape):
             try:
                 w_res = requests.get(w_url, timeout=10)
                 if w_res.status_code != 200:
-                    print(f"\nWeather API Error {w_res.status_code} on {date_str}")
+                    print(f"\n❌ Weather API Error {w_res.status_code} on {date_str}")
                     print(f"Message from server: {w_res.text}") 
                     sys.exit("Critical Error: Visual Crossing API failed. Halting scraping immediately.")
                 else:
                     hourly_weather = w_res.json().get('days', [{}])[0].get('hours', [])
             except Exception as e:
-                print(f"\nWeather Request Exception: {e}")
+                print(f"\n⚠️ Weather Request Exception: {e}")
                 sys.exit("Critical Error: Visual Crossing API connection failed. Halting scraping immediately.")
             
             for t_hour in STRATEGIC_HOURS:
@@ -100,7 +106,7 @@ def run_historical_batch(start_day_offset, days_to_scrape):
                 ts = f"{date_str} {t_hour}"
                 hour_val = int(t_hour.split(':')[0])
                 
-                # Nearest-Hour Weather Alignment
+                # Logic Fix 1: Nearest-Hour Weather Alignment
                 wh = get_nearest_weather(hourly_weather, t_hour)
                 
                 w_desc = wh.get('conditions') or "Clear"
@@ -126,7 +132,7 @@ def run_historical_batch(start_day_offset, days_to_scrape):
                     route_delay = max(0, curr_tt - free_tt)
                     speed_ratio = round(live_speed / free_speed, 2) if (free_speed and free_speed > 0) else 1.0
                     
-                    # Refined Congestion Interpretation (Avoiding name changes)
+                    # Logic Fix 2: Refined Congestion Interpretation (Avoiding name changes)
                     is_congested = 1 if speed_ratio < CONGESTION_THRESHOLD else 0
                     inc_types = "Congested" if is_congested else "None"
                     mag = 2 if is_congested else 0
@@ -158,23 +164,22 @@ def run_historical_batch(start_day_offset, days_to_scrape):
                     fname = f"VINH_TUY_OFFSET_{start_day_offset}.csv"
                     df.to_csv(fname, mode='a', header=not os.path.exists(fname), index=False)
                     
-                print(f"Logged {t_hour}", end="\r")
+                print(f"  ✅ Logged {t_hour}", end="\r")
 
 if __name__ == "__main__":
-    # ------------------------------------------
-    # PARTNER A
-    # Target: Days 1 to 81 (81 days total)
-    # ------------------------------------------
-    # run_historical_batch(start_day_offset=1, days_to_scrape=81)
+    # ==========================================
+    # FINAL 1-YEAR DISTRIBUTED SCRAPING
+    # ==========================================
+    # Member 1 (You) completed: Offsets 1 to 81 (DONE)
     
     # ------------------------------------------
-    # PARTNER B
+    # PARTNER A
     # Target: Days 82 to 223 (142 days total)
     # ------------------------------------------
     # run_historical_batch(start_day_offset=82, days_to_scrape=142)
     
     # ------------------------------------------
-    # PARTNER C
+    # PARTNER B
     # Target: Days 224 to 365 (142 days total)
     # ------------------------------------------
     # run_historical_batch(start_day_offset=224, days_to_scrape=142)
